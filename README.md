@@ -22,3 +22,19 @@ npm run app
 
 ## API Base URL
 [http://localhost:5500/](http://localhost:5500/)
+
+
+### Seeding Data
+
+```
+    Seed user data - (POST) http://localhost:5500/seed/user (user data is seeded by default on app start)
+
+    Seed book data - (POST) http://localhost:5500/seed/book 
+```
+
+
+### Get data from any existing table
+
+```
+    (GET) http://localhost:5500/fetch/{{tableName}}
+```
