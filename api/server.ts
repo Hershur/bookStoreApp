@@ -2,9 +2,12 @@ import express from 'express';
 import router from './src/routes';
 import sequelize from './src/orm/createDbConnection';
 import { FetchTableDataController } from './src/controllers';
+import cors from 'cors';
 
 
 export const app = express();
+
+app.use(cors())
 
 
 app.use('/', router);

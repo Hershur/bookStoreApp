@@ -1,33 +1,95 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState<Record<string, never>[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [tableName, setTableName] = useState('');
+  const [formData, setFormData] = useState<Record<string, string>>({});
+
+  const tableHeaders = data.length > 0 && Object.keys(data[0]);
+
+  const fetchData = useCallback(async (table: string) => {
+
+    try {
+      const url = `http://localhost:5500/fetch/${table || 'user'}`;
+      const result = await fetch(url);
+      const response = await result.json();
+      setLoading(false);
+      setData(response.data);
+      
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
+
+  }, []);
+
+  useEffect(() => {
+    fetchData(tableName);
+  }, [fetchData, tableName])
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <h2>Data Table</h2>
+
+      <div className="search-box">
+        <button 
+          type='button'
+          className="btn-search"
+          onClick={(e) => {
+            e.preventDefault();
+            setTableName(formData.table)
+          }}
+        >
+            Search
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+        <input 
+          onChange={(e) => setFormData(prev => ({...prev, [e.target.name]: e.target.value}))} 
+          type="text" 
+          name='table' 
+          className="input-search" 
+          placeholder="Enter table name..." 
+        />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <div className="table-wrapper">
+          {loading && <strong>Loading data...</strong>}
+          {!loading && data.length === 0 && <strong>No records....</strong>}
+          {
+            !loading && data.length > 0 &&
+            <table className="fl-table">
+                <thead>
+                  <tr>
+                      {
+                        tableHeaders && tableHeaders.length > 0 && tableHeaders.map(header => (
+                          <th key={header}>{header}</th>
+                        ))
+                      }
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    data.map(record => {
+                      const objRecord = Object.values(record);
+                      
+                      return (
+                        <tr key={record.id}>
+                            {
+                              objRecord.map(x => (
+                                <td>{x}</td>
+
+                              ))
+                            }
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
+            </table>
+          }
+      </div>
     </>
   )
 }
