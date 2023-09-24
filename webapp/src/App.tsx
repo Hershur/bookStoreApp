@@ -25,6 +25,7 @@ function App() {
     .then((response) => {
       setLoading(false);
       setData(response.data);
+      setErrorMessage('');
     })
     .catch((response) => {
       response.json().then((json: unknown) => {
