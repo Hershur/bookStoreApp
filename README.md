@@ -1,14 +1,21 @@
 # bookStoreApp
 
-# To start the app
-## cd into webapp directory and execute 'npm run app' -- this will start both the webapp and api simultaneouly
+# Install Dependencies
+### cd into webapp directory and execute 'npm run deps' -- this will install the dependencies for both the webapp and api
 
 ```
-    npm run app
+npm run deps
+```
+
+# Start the app
+### In the webapp directory, execute 'npm run app' -- this will start both the webapp and api simultaneouly
+
+```
+npm run app
 ```
 
 
-## Web App URl
+## Web App URL
 
 [ http://127.0.0.1:5173/](http://127.0.0.1:5173/)
 
